@@ -2,6 +2,7 @@
 
 int getline(char line[], int max);
 int strindex(char source[], char searchfor[]);
+int strindex2(char source[], char searchfor[]);
 
 char pattern[] = "ould";
 
@@ -9,10 +10,12 @@ const int MAXLINE = 1000;
 
 main() {
     char line[MAXLINE];
+    int l = 0;
 
     while ( getline(line, MAXLINE) )
-        if ( strindex(line, pattern) >= 0 ) {
-            printf("%s", line);
+        if ( (l = strindex2(line, pattern)) >= 0 ) {
+            printf("%s\n", line);
+            printf("%d\n", l);
         }
 }
 
@@ -33,7 +36,7 @@ int getline(char line[], int max) {
 }
 
 
-// strindex: return index of pattern in line, -1 otherwise
+// strindex: return first index of pattern in line, -1 if pattern is not in line
 int strindex(char line[], char pattern[]) {
     int i, j, k;
     for ( i = 0; line[i] != '\0'; ++i ) {
@@ -43,5 +46,19 @@ int strindex(char line[], char pattern[]) {
             return i;
     }
     return -1;
+
+}
+
+// strindex2: return last index of pattern in line, -1 if pattern is not in line
+int strindex2(char line[], char pattern[]) {
+    int i, j, k;
+    int lastposition = -1;
+    for ( i = 0; line[i] != '\0'; ++i ) {
+        for ( j = 0, k = i; pattern[j] != '\0' && line[k] == pattern[j] ; ++j, ++k );
+
+        if ( j > 0 && pattern[j] == '\0' )
+            lastposition = i;
+    }
+    return lastposition;
 
 }
